@@ -1,0 +1,4 @@
+-r pip-tools.txt
+-r requirements.txt
+tox
+pytest
