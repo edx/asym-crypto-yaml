@@ -132,6 +132,8 @@ This will give you a shell with access to the cli that hotreloads your code chan
     
     make build-docker shell
     
+If you just type 'make' a help document will be printed which will show you the available commands.
+    
     
 Update requirements
 ----------------------
