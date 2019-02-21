@@ -3,10 +3,16 @@ asym-crypto-yaml
 
 Encrypt secrets in YAML alongside non secrets in YAML. Can be used as a cli tool or as a dependency.
 
-Example:
-
+Installation
+-------------
 
     pip install asym-crypto-yaml
+
+
+Cli Usage
+-------------
+
+
 
     asym_crypto_yaml --help
 
@@ -115,3 +121,49 @@ The easiest way to do that is:
 
 
 Then just paste that in as the value anywhere within your yaml
+
+
+
+
+Python Usage
+-------------
+
+You can install asym_crypto_yaml as a dependency and and accomplish all of the clis functionality via the python API.
+
+    from asym_crypto_yaml import generate_private_key_to_file, generate_public_key_to_file,add_secret_to_yaml_file
+    
+    private_key = generate_private_key_to_file(private_key_output_filename)
+    public_key = generate_public_key_to_file(private_key_output_filename, public_key_output_filename)
+    add_secret_to_yaml_file(test_key_value, test_key_value, public_key_output_filename, yaml_file_to_append_to)
+
+See test_crypto.py for more examples.
+
+
+Docker Usage
+-------------
+The cli is published to Dockerhub as a docker image
+You can generate a public and private key in your current directory like so:
+    
+    docker run -it --rm -v $(pwd):/asym -w /asym asym_crypto_yaml generate-private-key --private_key_output key.private
+    docker run -it --rm -v $(pwd):/asym -w /asym asym_crypto_yaml generate-public-key --private_key_file key.private --public_key_output key.public
+    
+Any other cli commands can be run in this fashion.
+    
+    
+Tests(in docker)
+-------------
+
+Install docker first then:
+
+    make test
+    
+    
+Tests(out of docker)
+-------------
+
+Make sure you are using python > 3.6 then
+
+    pip install -r requirements/requirements.txt
+    make run-tests
+
+    
