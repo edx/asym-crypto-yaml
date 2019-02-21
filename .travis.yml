@@ -8,6 +8,7 @@ deploy:
   matrix:
   - provider: pypi
     on:
+      branch: master
       tags: true
     distributions: sdist bdist_wheel
     python: 3.6

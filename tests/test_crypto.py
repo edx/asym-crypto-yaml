@@ -93,7 +93,6 @@ def test_supported_keys_and_generated_lengths_match_chunking_invariant():
     is what we expect when new key sizes are added/removed so that encrypting long values will function.
     """
     for key_length in SUPPORTED_KEY_SIZES:
-        print("key length was: %s" % key_length)
         private_key = generate_new_private_key(key_length)
         public_key = generate_new_public_key(private_key)
 
