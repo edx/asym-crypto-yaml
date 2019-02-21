@@ -1,7 +1,7 @@
 asym-crypto-yaml
 ================
 
-Encrypt secrets in yaml alongside non secrets without changing the structure. Can be used as a cli tool or as a dependency.
+Encrypt secrets in YAML alongside non secrets in YAML. Can be used as a cli tool or as a dependency.
 
 Example:
 
