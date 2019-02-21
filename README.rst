@@ -12,8 +12,6 @@ Installation
 Cli Usage
 -------------
 
-
-
     asym_crypto_yaml --help
 
 First we generate some keys, the public key is used for encryption, the private key is used for decryption
@@ -127,4 +125,17 @@ Make sure you are using python > 3.6 then
     
     make run-tests
 
+    
+Deveopment(in docker)
+-------------
+This will give you a shell with access to the cli that hotreloads your code changes in your editor, clone the repo then do:
+    
+    make build-docker shell
+    
+    
+Update requirements
+----------------------
+Doing this will spin up the docker dev environment and update the requirements
+
+    make upgrade
     
