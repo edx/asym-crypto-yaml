@@ -1,4 +1,5 @@
 .DEFAULT_GOAL := help
+.PHONY: help build upgrade upgrade-requirements test run-tests shell
 
 # Generates a help message. Borrowed from https://github.com/pydanny/cookiecutter-djangopackage
 help: ## Display this help message
