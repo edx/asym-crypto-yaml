@@ -10,12 +10,12 @@ KEY_CHUNK_SIZE = 100
 SUPPORTED_KEY_SIZES = [2048, 4096]
 NUMBER_OF_BYTES_PER_ENCRYPTED_CHUNK = 693
 
-def encode(b):
+def _encode(b):
     """“Base64-encode a byte string, returning unicode, 
     this is done so that when pyyaml represents the Encrypted class instance it will look nice"""
     return base64.encodebytes(b).decode('ascii')
 
-def decode(s):
+def _decode(s):
     """Inverse of encode, takes a unicode string and returns Base-64 bytes"""
     return base64.decodebytes(s.encode('ascii'))
 
@@ -32,7 +32,7 @@ class Encrypted(str):
     def __repr__(self):
         return "!Encrypted %s " % self
 
-def encrypted_constructor(loader, node):
+def _encrypted_constructor(loader, node):
     """
     Used to tell pyyaml how to convert a string to an Encrypted class instance
     See: https://pyyaml.org/wiki/PyYAMLDocumentation
@@ -40,7 +40,7 @@ def encrypted_constructor(loader, node):
     value = loader.construct_scalar(node)
     return Encrypted(value)
 
-def encrypted_representer(self, data):
+def _encrypted_representer(self, data):
     """
     Used to tell pyyaml how to represent a Encrypted class instance as a string
     See: https://pyyaml.org/wiki/PyYAMLDocumentation
@@ -63,7 +63,7 @@ def encrypt_value(str_input, public_key):
     aggregate = ""
     chunks = chunk_input(str_input, KEY_CHUNK_SIZE)
     for chunk in chunks:
-        encrypted_chunk = encode(public_key.encrypt(
+        encrypted_chunk = _encode(public_key.encrypt(
             chunk.encode('utf-8'),
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -86,7 +86,7 @@ def decrypt_value(input, private_key):
         chunks = chunk_input(input, NUMBER_OF_BYTES_PER_ENCRYPTED_CHUNK)
         for chunk in chunks:
             aggregate += private_key.decrypt(
-            decode(chunk),
+            _decode(chunk),
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),
@@ -203,9 +203,9 @@ def decrypt_yaml_dict(input_dict, private_key):
             decrypted_dict[key] = decrypt_value(value, private_key)
     return decrypted_dict
 
-def configure_pyyaml():
-    yaml.SafeLoader.add_constructor(u'!Encrypted', encrypted_constructor)
-    yaml.SafeDumper.add_representer(Encrypted, encrypted_representer)
+def _configure_pyyaml():
+    yaml.SafeLoader.add_constructor(u'!Encrypted', _encrypted_constructor)
+    yaml.SafeDumper.add_representer(Encrypted, _encrypted_representer)
 
 def load(input, private_key_file=None):
     """
@@ -215,7 +215,7 @@ def load(input, private_key_file=None):
     It will return them instead of no key is passed.
     if the key is wrong, it will throw an exception.
     """
-    configure_pyyaml()
+    _configure_pyyaml()
     loaded_input = yaml.safe_load(input)
     if not isinstance(loaded_input, dict):
         return loaded_input
@@ -228,6 +228,7 @@ def dump(input_dict):
     """
     dumps a dict, converting it to a string, exists so this can be used as a dropin more easily for pyyaml
     """
+    _configure_pyyaml()
     return yaml.safe_dump(input_dict)
 
 def write_dict_to_yaml(input_dict, outfile):
@@ -244,10 +245,38 @@ def add_secret_to_yaml_file(yaml_key, yaml_value_unencrypted, public_key_file, y
     """
     public_key = load_public_key_from_file(public_key_file)
     encrypted = encrypt_value(yaml_value_unencrypted, public_key)
-    configure_pyyaml()
+    _configure_pyyaml()
     with open(yaml_file_to_append_to, "r") as f:
         encrypted_dict = yaml.safe_load(f)
     if encrypted_dict is None:
         encrypted_dict = {}
     encrypted_dict[yaml_key] = encrypted
     write_dict_to_yaml(encrypted_dict, yaml_file_to_append_to)
+
+def generate_private_key_to_file(outfile_path):
+    """ Convenience method used by cli """
+    private_key = generate_new_private_key()
+    write_private_key_to_file(private_key, outfile_path)
+    return private_key
+
+def generate_public_key_to_file(private_key_file_path, public_key_file_output_path):
+    """ Convenience method used by cli """
+    private_key = load_private_key_from_file(private_key_file_path)
+    public_key = generate_new_public_key(private_key)
+    write_public_key_to_file(public_key, public_key_file_output_path)
+    return public_key
+
+def encrypt_value_and_print(unencrypted_value, public_key_file):
+    public_key = load_public_key_from_file(public_key_file)
+    encrypted_value = encrypt_value(unencrypted_value, public_key)
+    print(yaml.dump(encrypted_value))
+    return encrypted_value
+
+def decrypt_yaml_file_and_write_encrypted_file_to_disk(input_yaml_file_path, private_key_path, output_yaml_file_path):
+    private_key = None
+    if private_key_path is not None:
+        private_key = load_private_key_from_file(private_key_path)
+    with open(input_yaml_file_path, "r") as f:
+        encrypted_secrets = yaml.load(f)
+    decrypted_secrets_dict = decrypt_yaml_dict(encrypted_secrets, private_key)
+    write_dict_to_yaml(decrypted_secrets_dict, output_yaml_file_path)
