@@ -1,0 +1,27 @@
+sudo: required
+language: python
+services:
+- docker
+script:
+- make test
+deploy:
+  matrix:
+  - provider: pypi
+    on:
+      branch: master
+      tags: true
+    distributions: sdist bdist_wheel
+    python: 3.6
+    user: edx
+    password:
+      secure: OUdmi26YD90XXo3HddnVRRnB0xHVZl2SEwyr7ne0E020/T1YF3z8s+Hr4Ca31/Rzy8A7ODJ/JEOrzan7ZDnakGIiepLYdReBaWmYJifme7c3GMkVebMWa6z+XKkRD0fzSdSSpj/oxXzyQ6uiMaZJ6p36ZZEayQoxxudlCjrZzk9vXspg7OI0gXUpn4zMtK/zgfZZEJbmKdrX5vdmqhimLQtUzuGTLmLParT90s5Ub+tRavVBjNEdgjlH29jqoQlo6jkQVbPCJXUgoO7FU7HDJR4MLLVyL66WSN5wNykbx5JpI6iNK8XlqVPhjcbUZiZLEUrPauaLLg4PFrrAKKzAlwfz1xKDi73E7oCPAt/OEgJiLSKHnO8YSiBcxVLxG3ruXgssBrsYRDfPq+MmPgNpnaV/oVmQL6D6BoIMgxYN7ROHi2AgpW417K3+dqzaN9aPnUHpC8/JuUdxryIKrB2PDmWmgR4kySr6IqnyvxB6ercFKiFRS79d4uGhh9NbIcKc1uou7tlYyLmzPa/Z/GmzLJngDcjInzsAwNWrnrhkAv9HryBPUgyvQ+3Uz8J10+Jk6L4OhgAzxwDtR4UzuD+f4KF6NHUJ8V+4aErAoI7/6Kbou8tasn8ExqlblYVPXQd4+xzMEDlIshYlz820VB9NcV693bnTZoyTQVUwt+piDRc=
+  - provider: script
+    on:
+      branch: master
+      tags: true
+    DOCKER_USERNAME:
+      secure: j6nesPlq2Qw799FT/GU1sdE4+4F1nNIRzrO5i5moiGned0rMS9PQyUrpVla3DF72Yqy0wxj6k9vxDq4DN9rWEGa2hNph9/ljs15HiVOUxVLNKMRL/FOIeplNtu/udVaxUFWpvLWCqR06fwW7yynKt/ZsrLXmVYtaiJFz26ryR6ZhBvwgyPQqq/uLwN8oOSDFSFlOiHfvE2RHaFr7Ie1DxBUSWL/gvn/dRMJ/hGwgFvHQq1YcgdPqn65WCRIFHPPuWhLa3y7v/qAJbMpvXlq/6Cbsl1xjMRpMzVyW5PSsUhQ8WxH3SG1ffvGYpHqgu2qAHvCMT9wDqb5qzAWm3KQHdczsiG9DlO3nAL7mk9dBBwDz45LUQlPv/bvFXptTiGRtKMzk64L75wJFu4ybVW7q+2jnAxbqR7XSRU+SeJaKer+kxonr6eylCDA4XJd7BO15zVGFjD0XeOwK6kL4Re/J9VsZX7SdT+jsimIbUoIMuPb0F6PFgmsXywKoztghX2l5e3ge4PZVn2AxDKqiZxreX58RfAOVw7UQ1KsfLvCdr2lHxUts0QCNic9EJCGmPeb9i4bKuIMn6NxCe0bzkAjU/fTPtjTQqgJ4RLyc6V4+rls0cWs8NHG9/pH8gm2Ppm1R1+pXDKRqfLbV91/Yq66Qk7cnb43rWis8O1IpI/dK+Yk=
+    DOCKER_PASSWORD:
+      secure: Q1O9q8b7h5tx3ScF50okEV6ZUsBlipCxHqA/hjubmFFm1RSO0q+hB+YeadK56OmegelixdBY6SUjlA5OHPA/0Ed8pnzJlNYZTGEt1ZfN7OU8/6QSijImJrMQaCii5xdf7PNi5Exz7R703SNaTsd0BzIpyoLhVCk7QO5y/TE+TOWS1/vh83ez2WMSNFvxLGIZoEBYnuATFdXkHLBQtRNK5dwhe5aDG37PKOvHc/SG+FAcP6qy/vBtx+CIAUhFPQv+xuiEn+j+Ir1VWzvHgA8Pv6OGlXNGrMrpRDheHDEFsxJ5BR6Xgg1TNV4XyIK5eMR/80vzXwvIT9xgXflpN3hdqU6truMOZjgWc42ToJ/F5XWpX9SDde009jpTodFjPaFChsMR6nXUmc9bTcAxbPK095rmxJrQC/VGxrwSgIyv2FfLQxgvNR3jBwVP/pMWcQfh+V5Vkx2dOcgkzNYd26EjDQZaxD070E/FS6pWY/ewPUgRqlC/O/3+UkTfGmA3lPio4rDVUqmwfFUybHDtR1ZO+fjr8TbqMYXZ8PR/Hy17SDffGMuhWTfTVM8znsbCy+AQ4soCFBJGiZkbwu4CpTTrfEnr0KSwTR3cywX1uOMks899dRUd7DuagI6WNj0PzEQplcz5OQu9ZslfL6IbVFg7Ird2TleT8gcnQ8ZPQId37e4=
+    script: bash .travis/docker_push
+

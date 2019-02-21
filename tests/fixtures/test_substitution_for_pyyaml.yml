@@ -1,0 +1,5 @@
+USERNAME: C
+HOSTNAME: B
+PASSWORD: !Encrypted |
+  AABBCC
+  
