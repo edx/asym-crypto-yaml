@@ -19,16 +19,16 @@ Cli Usage
 First we generate some keys, the public key is used for encryption, the private key is used for decryption
 the private key is SECRET
 
+the public key IS NOT SECRET.
 
     asym_crypto_yaml generate-private-key --private_key_output key.private
-
-the public key IS NOT SECRET.
 
     asym_crypto_yaml generate-public-key --private_key_file key.private --public_key_output key.public
 
 Say you have a yaml file named config.yml: 
 
     SOME_USERNAME: A
+    
     SOME_HOSTNAME: B
 
 
@@ -36,12 +36,7 @@ You want to add a new key/value pair:
 
     SOME_PASSWORD: C
 
-
-but you want it to be encrypted
-
-
-    touch config.yml
-
+but you want 'C' to be encrypted
 
 Using your public key, which is not a secret, you can encrypt it like so:
 
