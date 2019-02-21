@@ -4,5 +4,6 @@ dist
 build
 *.egg-info
 .pytest_cache
+tests/test_output
 
 
