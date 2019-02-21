@@ -121,7 +121,7 @@ Tests(out of docker)
 
 Make sure you are using python > 3.6 then
 
-    pip install -r requirements/requirements.txt
+    pip install -r requirements/development.txt
     
     make run-tests
 
