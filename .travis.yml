@@ -17,7 +17,6 @@ deploy:
   - provider: script
     on:
       branch: master
-      tags: true
     DOCKER_USERNAME:
       secure: j6nesPlq2Qw799FT/GU1sdE4+4F1nNIRzrO5i5moiGned0rMS9PQyUrpVla3DF72Yqy0wxj6k9vxDq4DN9rWEGa2hNph9/ljs15HiVOUxVLNKMRL/FOIeplNtu/udVaxUFWpvLWCqR06fwW7yynKt/ZsrLXmVYtaiJFz26ryR6ZhBvwgyPQqq/uLwN8oOSDFSFlOiHfvE2RHaFr7Ie1DxBUSWL/gvn/dRMJ/hGwgFvHQq1YcgdPqn65WCRIFHPPuWhLa3y7v/qAJbMpvXlq/6Cbsl1xjMRpMzVyW5PSsUhQ8WxH3SG1ffvGYpHqgu2qAHvCMT9wDqb5qzAWm3KQHdczsiG9DlO3nAL7mk9dBBwDz45LUQlPv/bvFXptTiGRtKMzk64L75wJFu4ybVW7q+2jnAxbqR7XSRU+SeJaKer+kxonr6eylCDA4XJd7BO15zVGFjD0XeOwK6kL4Re/J9VsZX7SdT+jsimIbUoIMuPb0F6PFgmsXywKoztghX2l5e3ge4PZVn2AxDKqiZxreX58RfAOVw7UQ1KsfLvCdr2lHxUts0QCNic9EJCGmPeb9i4bKuIMn6NxCe0bzkAjU/fTPtjTQqgJ4RLyc6V4+rls0cWs8NHG9/pH8gm2Ppm1R1+pXDKRqfLbV91/Yq66Qk7cnb43rWis8O1IpI/dK+Yk=
     DOCKER_PASSWORD:
