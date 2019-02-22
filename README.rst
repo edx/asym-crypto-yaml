@@ -1,6 +1,9 @@
 asym-crypto-yaml
 ================
 
+https://travis-ci.org/edx/asym-crypto-yaml.svg?branch=master
+
+
 Encrypt secrets in YAML alongside non secrets in YAML. Can be used as a cli tool or as a dependency.
 
 Installation
