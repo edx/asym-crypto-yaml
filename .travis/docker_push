@@ -1,4 +1,5 @@
 #!/bin/bash
+echo $DOCKER_USERNAME
 echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
 docker tag edxops/asym-crypto-yaml:latest edxops/asym-crypto-yaml:$TRAVIS_TAG
 docker push edxops/asym-crypto-yaml:$TRAVIS_TAG
