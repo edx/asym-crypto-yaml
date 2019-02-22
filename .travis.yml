@@ -8,5 +8,5 @@ deploy:
   provider: script
   on:
     branch: master
-  script: DOCKER_USERNAME=$DOCKER_USERNAME DOCKER_PASSWORD=$DOCKER_PASSWORD bash .travis/docker_push
+  script: DOCKER_USERNAME=$DOCKER_USERNAME DOCKER_PASSWORD=$DOCKER_PASSWORD TRAVIS_TAG=$TRAVIS_TAG bash .travis/docker_push
 
