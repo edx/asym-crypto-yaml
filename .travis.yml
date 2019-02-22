@@ -5,7 +5,6 @@ services:
 script:
 - make test
 deploy:
-  matrix:
   - provider: pypi
     on:
       branch: master
