@@ -120,7 +120,7 @@ Install docker first then:
     make test
     
     
-Tests(out of docker)
+Tests (out of docker)
 -------------
 
 Make sure you are using python > 3.6 then
@@ -130,7 +130,7 @@ Make sure you are using python > 3.6 then
     make run-tests
 
     
-Deveopment(in docker)
+Development (in docker)
 -------------
 This will give you a shell with access to the cli that hotreloads your code changes in your editor, clone the repo then do:
     
