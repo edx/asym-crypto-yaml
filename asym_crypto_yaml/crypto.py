@@ -277,6 +277,6 @@ def decrypt_yaml_file_and_write_encrypted_file_to_disk(input_yaml_file_path, pri
     if private_key_path is not None:
         private_key = load_private_key_from_file(private_key_path)
     with open(input_yaml_file_path, "r") as f:
-        encrypted_secrets = yaml.load(f)
+        encrypted_secrets = yaml.safe_load(f)
     decrypted_secrets_dict = decrypt_yaml_dict(encrypted_secrets, private_key)
     write_dict_to_yaml(decrypted_secrets_dict, output_yaml_file_path)
