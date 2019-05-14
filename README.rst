@@ -120,7 +120,7 @@ Install docker first then:
     make test
     
     
-Tests(out of docker)
+Tests (out of docker)
 -------------
 
 Make sure you are using python > 3.6 then
@@ -130,7 +130,7 @@ Make sure you are using python > 3.6 then
     make run-tests
 
     
-Deveopment(in docker)
+Development (in docker)
 -------------
 This will give you a shell with access to the cli that hotreloads your code changes in your editor, clone the repo then do:
     
@@ -145,3 +145,10 @@ Doing this will spin up the docker dev environment and update the requirements
 
     make upgrade
     
+Releasing to Pypi
+-----------------
+
+To create a new release, bump the version in setup.py and once it's merged tag the master with the version number.
+Travis will automatically push the new version to Pypi.
+
+https://travis-ci.org/edx/asym-crypto-yaml
