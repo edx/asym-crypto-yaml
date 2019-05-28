@@ -178,9 +178,9 @@ def test_add_secret_to_yaml_file():
     public_key_output_filename = "test_output/test_add_secret_to_yaml_file.public"
     private_key = generate_private_key_to_file(private_key_output_filename)
     public_key = generate_public_key_to_file(private_key_output_filename, public_key_output_filename)
-    test_key_value = "C"
+    test_key_value = "TEST_KEY"
 
-    yaml_file_fixture = "fixtures/simple_test_dict.yml"
+    yaml_file_fixture = "fixtures/test_add_secret_to_yaml_file.yml"
     yaml_file_to_append_to = "test_output/test_add_secret_to_yaml_file.yml"
     copyfile(yaml_file_fixture, yaml_file_to_append_to)
     
@@ -189,8 +189,8 @@ def test_add_secret_to_yaml_file():
         before_dict = load(f)
 
     # Check for expected test data
-    assert before_dict["A"] == "A"
-    assert before_dict["B"] == "B"
+    assert before_dict["Y"] == "B"
+    assert before_dict["X"] == "B"
 
     # Check the value we are adding is not already there
     assert test_key_value not in before_dict
@@ -208,8 +208,28 @@ def test_add_secret_to_yaml_file():
     assert after_dict[test_key_value] != test_key_value
 
     # Test the expected test data was not modified, and is still present.
-    assert after_dict["A"] == "A"
-    assert after_dict["B"] == "B"
+    assert after_dict["Y"] == "B"
+    assert after_dict["X"] == "B"
+
+    before_keys = before_dict.keys()
+    after_keys  = after_dict.keys()
+
+    # Zip stops when the shorter of the two stops
+    # so these should always be equal, this checks
+    # that order was preserved.
+    # this currently relies on a python 3.6+ 
+    # dict implementation that was added to the official spec.
+    # this part of this test ensures that this invariant is still
+    # valid.
+
+    print(before_keys)
+    print(after_keys)
+    for before_key, after_key in zip(before_keys, after_keys):
+        assert before_key == after_key
+
+
+
+
 
 def test_decrypt_yaml_file_and_write_encrypted_file_to_disk():
     private_key_output_filename = "test_output/test_decrypt_yaml_file_and_write_encrypted_file_to_disk.private"
@@ -218,7 +238,7 @@ def test_decrypt_yaml_file_and_write_encrypted_file_to_disk():
     public_key = generate_public_key_to_file(private_key_output_filename, public_key_output_filename)
     test_key_value = "C"
 
-    yaml_file_fixture = "fixtures/simple_test_dict.yml"
+    yaml_file_fixture = "fixtures/test_decrypt_yaml_file_and_write_encrypted_file_to_disk.yml"
     yaml_file_to_append_to = "test_output/test_decrypt_yaml_file_and_write_encrypted_file_to_disk.yml"
     copyfile(yaml_file_fixture, yaml_file_to_append_to)
 
