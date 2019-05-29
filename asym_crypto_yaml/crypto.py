@@ -1,7 +1,5 @@
 import yaml
 import base64
-import platform
-import sys
 from collections import OrderedDict
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
