@@ -215,13 +215,9 @@ def test_add_secret_to_yaml_file():
     after_keys  = after_dict.keys()
 
     # Zip stops when the shorter of the two stops
-    # so these should always be equal, this checks
+    # so these should always be equal as the new key should
+    # have been added to the end, this checks
     # that order was preserved.
-    # this currently relies on a python 3.6+ 
-    # dict implementation that was added to the official spec.
-    # this part of this test ensures that this invariant is still
-    # valid.
-
     for before_key, after_key in zip(before_keys, after_keys):
         assert before_key == after_key
 
