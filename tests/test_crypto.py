@@ -222,14 +222,8 @@ def test_add_secret_to_yaml_file():
     # this part of this test ensures that this invariant is still
     # valid.
 
-    print(before_keys)
-    print(after_keys)
     for before_key, after_key in zip(before_keys, after_keys):
         assert before_key == after_key
-
-
-
-
 
 def test_decrypt_yaml_file_and_write_encrypted_file_to_disk():
     private_key_output_filename = "test_output/test_decrypt_yaml_file_and_write_encrypted_file_to_disk.private"
