@@ -255,12 +255,6 @@ def decrypt_yaml_dict(input_dict, private_key):
 
 def safe_load(input, private_key_file=None):
     """
-    Wrapper for asym_crypto_yaml.load which calls yaml.safe_load
-    """
-    return load(input, private_key_file)
-
-def load(input, private_key_file=None):
-    """
     Configures pyyaml to deserialize Encrypted class instances, then calls decrypt_yaml_dict
     with a private key. 
     Decrypts and removes all the encrypted class instances in a yaml file.
@@ -274,6 +268,9 @@ def load(input, private_key_file=None):
     if private_key_file is not None:
         private_key = load_private_key_from_file(private_key_file)
     return decrypt_yaml_dict(loaded_input, private_key)
+
+def load(input, private_key_file=None):
+    return safe_load(input, private_key_file)
 
 def safe_dump(input_dict):
     """
