@@ -1,5 +1,6 @@
 import yaml
 import base64
+from collections import OrderedDict
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
@@ -22,7 +23,7 @@ def _decode(s):
 
 class Encrypted(str):
     """Subclassing str is used to deserialize a Encrypted object so we can easily 
-    tell between which values are encrypted and not encrypted when we do yaml.safe_load
+    tell between which values are encrypted and not encrypted when we do _safe_load
     this may cause problems, such as using toLower() will result in a str, not an Encrypted.
     When a correct key is passed these will be stripped out by decrypt_value
     See: https://pyyaml.org/wiki/PyYAMLDocumentation
@@ -46,6 +47,55 @@ def _encrypted_representer(self, data):
     See: https://pyyaml.org/wiki/PyYAMLDocumentation
     """
     return self.represent_scalar('!Encrypted', data, style='|')
+
+    """
+    Used to tell pyyaml how to convert a string to an dict class instance while preserving order
+    See: https://pyyaml.org/wiki/PyYAMLDocumentation
+    """
+def _dict_representer(dumper, data):
+    return dumper.represent_dict(getattr(data, "items")())
+
+    """
+    Used to tell pyyaml how to represent a dict as a string while preserving order
+    See: https://pyyaml.org/wiki/PyYAMLDocumentation
+    """
+def _dict_constructor(loader, node):
+    loader.flatten_mapping(node)
+    pairs = loader.construct_pairs(node)
+    try:
+        return OrderedDict(pairs)
+    except TypeError:
+        loader.construct_mapping(node)
+    raise
+
+def _configure_pyyaml():
+    """ 
+    Internal call to configures the various representers/constructors
+    used to ensure order is preserved in dictionaries and to yell pyYaml how to serialize and deserialize 
+    encrypted values
+    """
+    yaml.SafeLoader.add_constructor(u'!Encrypted', _encrypted_constructor)
+    yaml.SafeDumper.add_representer(Encrypted, _encrypted_representer)
+    yaml.add_representer(dict, _dict_representer, Dumper=yaml.SafeDumper)
+    yaml.add_representer(OrderedDict, _dict_representer, Dumper=yaml.SafeDumper)
+    for loader_name in yaml.loader.__all__:
+        Loader = getattr(yaml.loader, loader_name)
+        yaml.add_constructor("tag:yaml.org,2002:map", _dict_constructor, Loader=Loader)
+
+def _safe_load(input):
+    """
+    Ensures pyyaml is configured before calling safe_load
+    """
+    _configure_pyyaml()
+    return yaml.safe_load(input)
+
+def _safe_dump(input, f=None, default_flow_style=False):
+    """
+    Ensures pyyaml is configured before calling safe_dump
+    allows additional args
+    """
+    _configure_pyyaml()
+    return yaml.safe_dump(input, f, default_flow_style=default_flow_style)
 
 def check_key_length(public_or_private_key):
     """
@@ -203,11 +253,7 @@ def decrypt_yaml_dict(input_dict, private_key):
             decrypted_dict[key] = decrypt_value(value, private_key)
     return decrypted_dict
 
-def _configure_pyyaml():
-    yaml.SafeLoader.add_constructor(u'!Encrypted', _encrypted_constructor)
-    yaml.SafeDumper.add_representer(Encrypted, _encrypted_representer)
-
-def load(input, private_key_file=None):
+def safe_load(input, private_key_file=None):
     """
     Configures pyyaml to deserialize Encrypted class instances, then calls decrypt_yaml_dict
     with a private key. 
@@ -215,8 +261,7 @@ def load(input, private_key_file=None):
     It will return them instead of no key is passed.
     if the key is wrong, it will throw an exception.
     """
-    _configure_pyyaml()
-    loaded_input = yaml.safe_load(input)
+    loaded_input = _safe_load(input)
     if not isinstance(loaded_input, dict):
         return loaded_input
     private_key = None
@@ -224,19 +269,27 @@ def load(input, private_key_file=None):
         private_key = load_private_key_from_file(private_key_file)
     return decrypt_yaml_dict(loaded_input, private_key)
 
+def load(input, private_key_file=None):
+    return safe_load(input, private_key_file)
+
+def safe_dump(input_dict):
+    """
+    Wrapper for asym_crypto_yaml.dump which calls yaml.safe_dump
+    """
+    return dump(input_dict)
+
 def dump(input_dict):
     """
     dumps a dict, converting it to a string, exists so this can be used as a dropin more easily for pyyaml
     """
-    _configure_pyyaml()
-    return yaml.safe_dump(input_dict)
+    return _safe_dump(input_dict)
 
 def write_dict_to_yaml(input_dict, outfile):
     """
     dumps a dict to a file
     """
     with open(outfile, "w") as f:
-        yaml.safe_dump(input_dict, f, default_flow_style=False)
+        _safe_dump(input_dict, f, default_flow_style=False)
 
 def add_secret_to_yaml_file(yaml_key, yaml_value_unencrypted, public_key_file, yaml_file_to_append_to):
     """
@@ -245,9 +298,8 @@ def add_secret_to_yaml_file(yaml_key, yaml_value_unencrypted, public_key_file, y
     """
     public_key = load_public_key_from_file(public_key_file)
     encrypted = encrypt_value(yaml_value_unencrypted, public_key)
-    _configure_pyyaml()
     with open(yaml_file_to_append_to, "r") as f:
-        encrypted_dict = yaml.safe_load(f)
+        encrypted_dict = _safe_load(f)
     if encrypted_dict is None:
         encrypted_dict = {}
     encrypted_dict[yaml_key] = encrypted
@@ -269,7 +321,7 @@ def generate_public_key_to_file(private_key_file_path, public_key_file_output_pa
 def encrypt_value_and_print(unencrypted_value, public_key_file):
     public_key = load_public_key_from_file(public_key_file)
     encrypted_value = encrypt_value(unencrypted_value, public_key)
-    print(yaml.dump(encrypted_value))
+    print(_safe_dump(encrypted_value))
     return encrypted_value
 
 def decrypt_yaml_file_and_write_encrypted_file_to_disk(input_yaml_file_path, private_key_path, output_yaml_file_path):
@@ -277,6 +329,6 @@ def decrypt_yaml_file_and_write_encrypted_file_to_disk(input_yaml_file_path, pri
     if private_key_path is not None:
         private_key = load_private_key_from_file(private_key_path)
     with open(input_yaml_file_path, "r") as f:
-        encrypted_secrets = yaml.safe_load(f)
+        encrypted_secrets = _safe_load(f)
     decrypted_secrets_dict = decrypt_yaml_dict(encrypted_secrets, private_key)
     write_dict_to_yaml(decrypted_secrets_dict, output_yaml_file_path)
