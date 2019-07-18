@@ -305,6 +305,22 @@ def add_secret_to_yaml_file(yaml_key, yaml_value_unencrypted, public_key_file, y
     encrypted_dict[yaml_key] = encrypted
     write_dict_to_yaml(encrypted_dict, yaml_file_to_append_to)
 
+def reencrypt_secrets(input_dict, private_key, public_key):
+    """
+    Re-encrypt all secrets in a yaml file.
+    """
+    encrypted_dict = {}
+    for key, value in input_dict.items():
+        if isinstance(value, dict):
+            value = reencrypt_secrets(value, private_key, public_key)
+        if isinstance(value,Encrypted):
+            yaml_value_unencrypted = decrypt_value(value, private_key)
+            encrypted = encrypt_value(yaml_value_unencrypted, public_key)
+            encrypted_dict[key] = encrypted
+        else:
+            encrypted_dict[key] = value
+    return encrypted_dict
+
 def generate_private_key_to_file(outfile_path):
     """ Convenience method used by cli """
     private_key = generate_new_private_key()
@@ -332,3 +348,14 @@ def decrypt_yaml_file_and_write_encrypted_file_to_disk(input_yaml_file_path, pri
         encrypted_secrets = _safe_load(f)
     decrypted_secrets_dict = decrypt_yaml_dict(encrypted_secrets, private_key)
     write_dict_to_yaml(decrypted_secrets_dict, output_yaml_file_path)
+
+def reencrypt_secrets_and_write_to_yaml_file(input_yaml_file_path, private_key_path, public_key_path):
+    private_key = None
+    public_key = None
+    if private_key_path and public_key_path is not None:
+        private_key = load_private_key_from_file(private_key_path)
+        public_key = load_public_key_from_file(public_key_path)
+    with open(input_yaml_file_path, "r") as f:
+        encrypted_secrets = _safe_load(f)
+    encrypted_secrets_dict = reencrypt_secrets(encrypted_secrets, private_key, public_key)
+    write_dict_to_yaml(encrypted_secrets_dict, input_yaml_file_path)
