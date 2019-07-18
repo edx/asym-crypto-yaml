@@ -10,7 +10,8 @@ load_private_key_from_file, load_public_key_from_file,
 generate_new_private_key, generate_new_public_key,
 load, dump, NUMBER_OF_BYTES_PER_ENCRYPTED_CHUNK, KEY_CHUNK_SIZE,
 SUPPORTED_KEY_SIZES, generate_private_key_to_file, generate_private_key_to_file, generate_public_key_to_file,
-encrypt_value_and_print ,add_secret_to_yaml_file, decrypt_yaml_file_and_write_encrypted_file_to_disk)
+encrypt_value_and_print ,add_secret_to_yaml_file, decrypt_yaml_file_and_write_encrypted_file_to_disk,
+reencrypt_secrets_and_write_to_yaml_file)
 
 
 def test_serialization_and_deserialization_does_not_garble_output():
@@ -242,3 +243,44 @@ def test_decrypt_yaml_file_and_write_encrypted_file_to_disk():
     after_dict["B"] = "B"
     after_dict["C"] = "C"
 
+def test_reencrypt_secrets_and_write_to_yaml_file():
+
+    private_key_file = "fixtures/test.private"
+    private_key = load_private_key_from_file(private_key_file)
+    
+    yaml_file_fixture = "fixtures/test_reencrypt_secrets_and_write_to_yaml_file.yml"
+    input_yaml_file = "test_output/test_reencrypt_secrets_and_write_to_yaml_file.yml"
+    test_encrypted_key = "C"
+
+    copyfile(yaml_file_fixture, input_yaml_file)
+
+    private_key_output_filename_new = "test_output/test_new_reencrypt_secrets_and_write_to_yaml_file.private"
+    public_key_output_filename_new = "test_output/test_new_reencrypt_secrets_and_write_to_yaml_file.public"
+    private_key_new = generate_private_key_to_file(private_key_output_filename_new)
+    public_key_new = generate_public_key_to_file(private_key_output_filename_new, public_key_output_filename_new)
+
+    reencrypt_secrets_and_write_to_yaml_file(input_yaml_file, private_key_file, public_key_output_filename_new)
+   
+    before_dict = None
+    with open(yaml_file_fixture, "r") as f:
+        before_dict = load(f)
+   
+    # Check for expected test data
+    assert before_dict["A"] == "A"
+    assert before_dict["B"] == "B"
+
+    # Check for expected encrypted test data
+    test_encrypted_key_value = decrypt_value(before_dict[test_encrypted_key], private_key)
+    assert test_encrypted_key_value == "C"
+
+    after_dict = None
+    with open(input_yaml_file, "r") as f:
+        after_dict = load(f)
+
+    # Test the expected test data was not modified, and is still present
+    assert after_dict["A"] == "A"
+    assert after_dict["B"] == "B"
+
+    # Test the value is re-encrypted 
+    test_encrypted_key_value = decrypt_value(after_dict[test_encrypted_key], private_key_new)
+    assert test_encrypted_key_value == "C"

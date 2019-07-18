@@ -87,6 +87,21 @@ The easiest way to do that is:
 
 Then just paste that in as the value anywhere within your yaml
 
+If you need to rotate encryption keys you will need to re-encrypt all secrets in your yaml using new key(s)
+First generate new keys and use your old private key and new public key to re-encrypt all values that was encrypted using the old key
+
+    asym_crypto_yaml reencrypt-yaml --secrets_file_path config.yml --private_key_path key.private --public_key_path new_key.public
+
+    cat config.yml
+
+    |  SOME_HOSTNAME: B
+    |  SOME_PASSWORD: !Encrypted |
+    |   AABBCCDDZZZZZ
+    |  SOME_TOP_LEVEL_KEY:
+    |    SOME_OTHER_PASSWORD: !Encrypted |
+    |       AABBCCDDZZZZZ
+    |  SOME_USERNAME: A
+
 Python Usage
 -------------
 
