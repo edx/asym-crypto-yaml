@@ -243,7 +243,7 @@ def decrypt_yaml_dict(input_dict, private_key):
     """
     decrypted_dict = {}
     for key, value in input_dict.items():
-        if isinstance(input, dict):
+        if isinstance(value, dict):
             value = decrypt_yaml_dict(value, private_key)
         if private_key is None:
             # Cannot decrypt, as we do not have a key, so just return
