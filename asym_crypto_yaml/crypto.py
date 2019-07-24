@@ -245,6 +245,21 @@ def decrypt_yaml_dict(input_dict, private_key):
     for key, value in input_dict.items():
         if isinstance(value, dict):
             value = decrypt_yaml_dict(value, private_key)
+
+        elif isinstance(value,list):
+            decrypted_list = []
+            for item in value:
+                if isinstance(item, dict):
+                    item = decrypt_yaml_dict(item, private_key)
+                    decrypted_list.append(item)
+                else:
+                    if private_key is None:
+                        decrypted_list.append(item)
+                    else:
+                        item = decrypt_value(item, private_key)
+                        decrypted_list.append(item)
+            value = decrypted_list
+
         if private_key is None:
             # Cannot decrypt, as we do not have a key, so just return
             # the value.  It will be a string or an Encrypted class instance depending on if it was encrypted or not.
@@ -313,7 +328,23 @@ def reencrypt_secrets(input_dict, private_key, public_key):
     for key, value in input_dict.items():
         if isinstance(value, dict):
             value = reencrypt_secrets(value, private_key, public_key)
-        if isinstance(value,Encrypted):
+
+        elif isinstance(value,list):
+            encrypted_list = []
+            for item in value:
+                if isinstance(item, dict):
+                    item = reencrypt_secrets(item, private_key, public_key)
+                    encrypted_list.append(item)
+                else:
+                    if isinstance(item, Encrypted):
+                        unencrypted_item = decrypt_value(item, private_key)
+                        encrypted_item = encrypt_value(unencrypted_item, public_key)
+                        encrypted_list.append(encrypted_item)
+                    else:
+                        encrypted_list.append(item)
+            value = encrypted_list
+
+        if isinstance(value, Encrypted):
             yaml_value_unencrypted = decrypt_value(value, private_key)
             encrypted = encrypt_value(yaml_value_unencrypted, public_key)
             encrypted_dict[key] = encrypted
