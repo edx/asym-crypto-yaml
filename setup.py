@@ -15,7 +15,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='asym_crypto_yaml',  # Required
-    version='0.0.8',  # Required
+    version='0.0.9',  # Required
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),  # Required
     python_requires=">=3.6",
     include_package_data=True,
