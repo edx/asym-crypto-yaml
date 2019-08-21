@@ -5,6 +5,8 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.hazmat.primitives import hashes
+from functools import reduce
+from operator import getitem
 
 # Magic numbers
 KEY_CHUNK_SIZE = 100
@@ -96,6 +98,11 @@ def _safe_dump(input, f=None, default_flow_style=False):
     """
     _configure_pyyaml()
     return yaml.safe_dump(input, f, default_flow_style=default_flow_style)
+
+def update_nested_item(inputdict, keylist, val):
+    """Update item in nested dictionary"""
+    reduce(getitem, keylist[:-1], inputdict)[keylist[-1]] = val
+    return inputdict
 
 def check_key_length(public_or_private_key):
     """
@@ -317,7 +324,7 @@ def add_secret_to_yaml_file(yaml_key, yaml_value_unencrypted, public_key_file, y
         encrypted_dict = _safe_load(f)
     if encrypted_dict is None:
         encrypted_dict = {}
-    encrypted_dict[yaml_key] = encrypted
+    encrypted_dict = update_nested_item(encrypted_dict, yaml_key.split(":"), encrypted)
     write_dict_to_yaml(encrypted_dict, yaml_file_to_append_to)
 
 def reencrypt_secrets(input_dict, private_key, public_key):

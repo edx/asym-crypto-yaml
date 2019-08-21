@@ -12,6 +12,7 @@ load, dump, NUMBER_OF_BYTES_PER_ENCRYPTED_CHUNK, KEY_CHUNK_SIZE,
 SUPPORTED_KEY_SIZES, generate_private_key_to_file, generate_private_key_to_file, generate_public_key_to_file,
 encrypt_value_and_print ,add_secret_to_yaml_file, decrypt_yaml_file_and_write_encrypted_file_to_disk,
 reencrypt_secrets_and_write_to_yaml_file)
+from functools import reduce
 
 
 def test_serialization_and_deserialization_does_not_garble_output():
@@ -284,3 +285,49 @@ def test_reencrypt_secrets_and_write_to_yaml_file():
     # Test the value is re-encrypted 
     test_encrypted_key_value = decrypt_value(after_dict[test_encrypted_key], private_key_new)
     assert test_encrypted_key_value == "C"
+
+
+def test_add_nested_secret_to_yaml_file():
+    private_key_output_filename = "test_output/test_add_nested_secret_to_yaml_file.private"
+    public_key_output_filename = "test_output/test_add_nested_secret_to_yaml_file.public"
+    private_key = generate_private_key_to_file(private_key_output_filename)
+    public_key = generate_public_key_to_file(private_key_output_filename, public_key_output_filename)
+    nested_value = "test"
+    nested_key = "TEST_PARENT_KEY:TEST_CHILD_KEY"
+
+    yaml_file_fixture = "fixtures/test_add_nested_secret_to_yaml_file.yml"
+    yaml_file_to_append_to = "test_output/test_add_nested_secret_to_yaml_file.yml"
+    copyfile(yaml_file_fixture, yaml_file_to_append_to)
+
+    before_dict = None
+    with open(yaml_file_to_append_to, "r") as f:
+        before_dict = load(f)
+
+    # Check for expected test data
+    assert before_dict["Y"] == "B"
+    assert before_dict["X"] == "B"
+
+    add_secret_to_yaml_file(nested_key, nested_value, public_key_output_filename, yaml_file_to_append_to)
+
+    with open(yaml_file_to_append_to, "r") as f:
+        after_dict = load(f)
+
+    # Test the value is encrypted.
+    assert isinstance(reduce(lambda x, y: x[y], nested_key.split(":"), after_dict), Encrypted)
+
+    # Test the value was actually encrypted
+    assert reduce(lambda x, y: x[y], nested_key.split(":"), after_dict) != nested_value
+
+    # Test the expected test data was not modified, and is still present.
+    assert after_dict["Y"] == "B"
+    assert after_dict["X"] == "B"
+
+    before_keys = before_dict.keys()
+    after_keys = after_dict.keys()
+
+    # Zip stops when the shorter of the two stops
+    # so these should always be equal as the new key should
+    # have been added to the end, this checks
+    # that order was preserved.
+    for before_key, after_key in zip(before_keys, after_keys):
+        assert before_key == after_key
