@@ -292,8 +292,8 @@ def test_add_nested_secret_to_yaml_file():
     public_key_output_filename = "test_output/test_add_nested_secret_to_yaml_file.public"
     private_key = generate_private_key_to_file(private_key_output_filename)
     public_key = generate_public_key_to_file(private_key_output_filename, public_key_output_filename)
-    test_key_value = "TEST_PARENT_KEY"
-    test_nested_key_value = "TEST_PARENT_KEY:TEST_CHILD_KEY"
+    nested_value = "test"
+    nested_key = "TEST_PARENT_KEY:TEST_CHILD_KEY"
 
     yaml_file_fixture = "fixtures/test_add_nested_secret_to_yaml_file.yml"
     yaml_file_to_append_to = "test_output/test_add_nested_secret_to_yaml_file.yml"
@@ -307,19 +307,16 @@ def test_add_nested_secret_to_yaml_file():
     assert before_dict["Y"] == "B"
     assert before_dict["X"] == "B"
 
-    # Check the value we are adding is not already there
-    add_secret_to_yaml_file(test_nested_key_value, test_key_value, public_key_output_filename, yaml_file_to_append_to)
+    add_secret_to_yaml_file(nested_key, nested_value, public_key_output_filename, yaml_file_to_append_to)
 
     with open(yaml_file_to_append_to, "r") as f:
         after_dict = load(f)
-    # Test the value was added
-    assert test_key_value in after_dict
 
     # Test the value is encrypted.
-    assert isinstance(reduce(lambda x, y: x[y], test_nested_key_value.split(":"), after_dict), Encrypted)
+    assert isinstance(reduce(lambda x, y: x[y], nested_key.split(":"), after_dict), Encrypted)
 
     # Test the value was actually encrypted
-    assert reduce(lambda x, y: x[y], test_nested_key_value.split(":"), after_dict) != test_key_value
+    assert reduce(lambda x, y: x[y], nested_key.split(":"), after_dict) != nested_value
 
     # Test the expected test data was not modified, and is still present.
     assert after_dict["Y"] == "B"
