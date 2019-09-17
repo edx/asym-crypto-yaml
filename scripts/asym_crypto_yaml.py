@@ -6,7 +6,7 @@ from asym_crypto_yaml import (Encrypted, decrypt_value, encrypt_value, load_publ
     generate_new_public_key, write_public_key_to_file, write_private_key_to_file,
     add_secret_to_yaml_file, decrypt_yaml_dict, write_dict_to_yaml, generate_private_key_to_file,
     generate_public_key_to_file, encrypt_value_and_print, decrypt_yaml_file_and_write_encrypted_file_to_disk,
-    reencrypt_secrets_and_write_to_yaml_file)
+    reencrypt_secrets_and_write_to_yaml_file, rotate_secrets_and_write_to_yaml_file)
 
 # Please make additional commands added to the cli a single function call and provide a test case.
 
@@ -54,12 +54,23 @@ def decrypt_encrypted_yaml(secrets_file_path, private_key_path, outfile_path):
 def reencrypt_yaml(secrets_file_path, private_key_path,public_key_path):
     reencrypt_secrets_and_write_to_yaml_file(secrets_file_path, private_key_path, public_key_path)
 
+@click.command()
+@click.option('--secrets_dir_path', help='', default="config/config.yaml")
+@click.option('--private_key_path', help='Old Private Key to decrypt the encrypted secrets in yaml file')
+@click.option('--public_key_path', help='New Public Key to re-encrypt the secrets in yaml file')
+@click.option('--old-secret', prompt=True, hide_input=True)
+@click.option('--new-secret', prompt=True, hide_input=True)
+def rotate_secret(secrets_dir_path, private_key_path, public_key_path, old_secret, new_secret):
+    rotate_secrets_and_write_to_yaml_file(secrets_dir_path, private_key_path, public_key_path, old_secret, new_secret)
+
+
 cli.add_command(generate_private_key)
 cli.add_command(generate_public_key)
 cli.add_command(add_secret)
 cli.add_command(encrypt_secret)
 cli.add_command(decrypt_encrypted_yaml)
 cli.add_command(reencrypt_yaml)
+cli.add_command(rotate_secret)
 
 if __name__ == '__main__':
     cli()

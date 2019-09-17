@@ -1,5 +1,7 @@
 import yaml
 import base64
+import os
+import glob
 from collections import OrderedDict
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
@@ -359,6 +361,46 @@ def reencrypt_secrets(input_dict, private_key, public_key):
             encrypted_dict[key] = value
     return encrypted_dict
 
+
+def rotate_secrets(input_dict, private_key, public_key, old_secret, new_secret):
+    """
+    Rotate secrets in all yaml files of given directory.
+    """
+    encrypted_dict = {}
+    for key, value in input_dict.items():
+        if isinstance(value, dict):
+            value = rotate_secrets(value, private_key, public_key, old_secret, new_secret)
+
+        elif isinstance(value,list):
+            encrypted_list = []
+            for item in value:
+                if isinstance(item, dict):
+                    item = rotate_secrets(item, private_key, public_key, old_secret, new_secret)
+                    encrypted_list.append(item)
+                else:
+                    if isinstance(item, Encrypted):
+                        unencrypted_item = decrypt_value(item, private_key)
+                        if unencrypted_item == old_secret:
+                            encrypted_item = encrypt_value(new_secret, public_key)
+                            encrypted_list.append(encrypted_item)
+                        else:
+                            encrypted_list.append(item)
+                    else:
+                        encrypted_list.append(item)
+            value = encrypted_list
+
+        if isinstance(value, Encrypted):
+            yaml_value_unencrypted = decrypt_value(value, private_key)
+            if yaml_value_unencrypted == old_secret:
+                encrypted = encrypt_value(new_secret, public_key)
+                encrypted_dict[key] = encrypted
+            else:
+                encrypted_dict[key] = value
+        else:
+            encrypted_dict[key] = value
+    return encrypted_dict
+
+
 def generate_private_key_to_file(outfile_path):
     """ Convenience method used by cli """
     private_key = generate_new_private_key()
@@ -397,3 +439,16 @@ def reencrypt_secrets_and_write_to_yaml_file(input_yaml_file_path, private_key_p
         encrypted_secrets = _safe_load(f)
     encrypted_secrets_dict = reencrypt_secrets(encrypted_secrets, private_key, public_key)
     write_dict_to_yaml(encrypted_secrets_dict, input_yaml_file_path)
+
+
+def rotate_secrets_and_write_to_yaml_file(secrets_dir_path, private_key_path, public_key_path, old_secret, new_secret):
+    private_key = None
+    public_key = None
+    if private_key_path and public_key_path is not None:
+        private_key = load_private_key_from_file(private_key_path)
+        public_key = load_public_key_from_file(public_key_path)
+    for input_yaml_file_path in glob.glob(os.path.join(secrets_dir_path, '*.y*ml')):
+        with open(input_yaml_file_path, "r") as f:
+            encrypted_secrets = _safe_load(f)
+        encrypted_secrets_dict = rotate_secrets(encrypted_secrets, private_key, public_key, old_secret, new_secret)
+        write_dict_to_yaml(encrypted_secrets_dict, input_yaml_file_path)
