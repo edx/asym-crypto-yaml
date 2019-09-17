@@ -447,7 +447,7 @@ def rotate_secrets_and_write_to_yaml_file(secrets_dir_path, private_key_path, pu
     if private_key_path and public_key_path is not None:
         private_key = load_private_key_from_file(private_key_path)
         public_key = load_public_key_from_file(public_key_path)
-    for input_yaml_file_path in glob.glob(os.path.join(secrets_dir_path, '*.yml')):
+    for input_yaml_file_path in glob.glob(os.path.join(secrets_dir_path, '*.y*ml')):
         with open(input_yaml_file_path, "r") as f:
             encrypted_secrets = _safe_load(f)
         encrypted_secrets_dict = rotate_secrets(encrypted_secrets, private_key, public_key, old_secret, new_secret)
