@@ -1,6 +1,6 @@
 from ubuntu:bionic
 
-RUN apt-get update && apt-get install locales=2.27-3ubuntu1 git python3.6 python3-pip -qy && \
+RUN apt-get update && apt-get install locales=2.27-3ubuntu1 git python3.6 python3-pip python3.8 python3.8-distutils python3.8-dev -qy && \
 pip3 install --upgrade pip setuptools && \
 if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
 if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
