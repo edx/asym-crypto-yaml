@@ -13,7 +13,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 WORKDIR /app
-ADD requirements/requirements.txt /app/requirements/requirements.txt
+ADD requirements/base.txt /app/requirements/base.txt
 ADD requirements/development.txt /app/requirements/development.txt
 ADD requirements/pip-tools.txt /app/requirements/pip-tools.txt
 RUN pip install pip-tools

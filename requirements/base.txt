@@ -5,8 +5,8 @@
 #    make upgrade
 #
 cffi==1.14.0              # via cryptography
-click==7.1.2              # via -r requirements/requirements.in
-cryptography==2.9.2       # via -r requirements/requirements.in
+click==7.1.2              # via -r requirements/base.in
+cryptography==2.9.2       # via -r requirements/base.in
 pycparser==2.20           # via cffi
-pyyaml==5.3.1             # via -r requirements/requirements.in
+pyyaml==5.3.1             # via -r requirements/base.in
 six==1.15.0               # via cryptography

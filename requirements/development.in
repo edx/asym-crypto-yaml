@@ -1,4 +1,4 @@
 -r pip-tools.txt
--r requirements.txt
+-r base.txt
 tox
 pytest
