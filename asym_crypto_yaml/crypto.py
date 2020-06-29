@@ -417,7 +417,7 @@ def generate_public_key_to_file(private_key_file_path, public_key_file_output_pa
 def encrypt_value_and_print(unencrypted_value, public_key_file):
     public_key = load_public_key_from_file(public_key_file)
     encrypted_value = encrypt_value(unencrypted_value, public_key)
-    print((_safe_dump(encrypted_value)))
+    print(_safe_dump(encrypted_value))
     return encrypted_value
 
 def decrypt_yaml_file_and_write_encrypted_file_to_disk(input_yaml_file_path, private_key_path, output_yaml_file_path):
