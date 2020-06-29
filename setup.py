@@ -43,7 +43,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),  # Required
     python_requires=">=3.6",
     include_package_data=True,
-    install_requires=load_requirements('requirements/requirements.in'),
+    install_requires=load_requirements('requirements/base.in'),
     entry_points='''
         [console_scripts]
         asym_crypto_yaml=scripts.asym_crypto_yaml:cli

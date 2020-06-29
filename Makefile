@@ -14,7 +14,7 @@ upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
 upgrade: ## update the pip requirements files to use the latest releases satisfying our constraints
 	pip install -q -r requirements/pip-tools.txt
 	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
-	pip-compile --upgrade -o requirements/requirements.txt requirements/requirements.in
+	pip-compile --upgrade -o requirements/base.txt requirements/base.in
 	pip-compile --upgrade -o requirements/development.txt requirements/development.in
 
 test: ## Run tests using tox
