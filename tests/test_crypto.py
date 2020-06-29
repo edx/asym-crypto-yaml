@@ -213,8 +213,8 @@ def test_add_secret_to_yaml_file():
     assert after_dict["Y"] == "B"
     assert after_dict["X"] == "B"
 
-    before_keys = before_dict.keys()
-    after_keys  = after_dict.keys()
+    before_keys = list(before_dict.keys())
+    after_keys  = list(after_dict.keys())
 
     # Zip stops when the shorter of the two stops
     # so these should always be equal as the new key should
@@ -322,8 +322,8 @@ def test_add_nested_secret_to_yaml_file():
     assert after_dict["Y"] == "B"
     assert after_dict["X"] == "B"
 
-    before_keys = before_dict.keys()
-    after_keys = after_dict.keys()
+    before_keys = list(before_dict.keys())
+    after_keys = list(after_dict.keys())
 
     # Zip stops when the shorter of the two stops
     # so these should always be equal as the new key should
