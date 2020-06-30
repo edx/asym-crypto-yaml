@@ -1,7 +1,7 @@
 import click
 import yaml
 from base64 import b64encode
-from asym_crypto_yaml import (Encrypted, decrypt_value, encrypt_value, load_public_key_from_file,
+from .asym_crypto_yaml import (Encrypted, decrypt_value, encrypt_value, load_public_key_from_file,
     load_private_key_from_file, load_private_key_from_string, generate_new_private_key,
     generate_new_public_key, write_public_key_to_file, write_private_key_to_file,
     add_secret_to_yaml_file, decrypt_yaml_dict, write_dict_to_yaml, generate_private_key_to_file,

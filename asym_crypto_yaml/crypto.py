@@ -78,7 +78,7 @@ def _configure_pyyaml():
     used to ensure order is preserved in dictionaries and to yell pyYaml how to serialize and deserialize 
     encrypted values
     """
-    yaml.SafeLoader.add_constructor(u'!Encrypted', _encrypted_constructor)
+    yaml.SafeLoader.add_constructor('!Encrypted', _encrypted_constructor)
     yaml.SafeDumper.add_representer(Encrypted, _encrypted_representer)
     yaml.add_representer(dict, _dict_representer, Dumper=yaml.SafeDumper)
     yaml.add_representer(OrderedDict, _dict_representer, Dumper=yaml.SafeDumper)
@@ -251,7 +251,7 @@ def decrypt_yaml_dict(input_dict, private_key):
     if the key is wrong, it will throw an exception.
     """
     decrypted_dict = {}
-    for key, value in input_dict.items():
+    for key, value in list(input_dict.items()):
         if isinstance(value, dict):
             value = decrypt_yaml_dict(value, private_key)
 
@@ -334,7 +334,7 @@ def reencrypt_secrets(input_dict, private_key, public_key):
     Re-encrypt all secrets in a yaml file.
     """
     encrypted_dict = {}
-    for key, value in input_dict.items():
+    for key, value in list(input_dict.items()):
         if isinstance(value, dict):
             value = reencrypt_secrets(value, private_key, public_key)
 
@@ -367,7 +367,7 @@ def rotate_secrets(input_dict, private_key, public_key, old_secret, new_secret):
     Rotate secrets in all yaml files of given directory.
     """
     encrypted_dict = {}
-    for key, value in input_dict.items():
+    for key, value in list(input_dict.items()):
         if isinstance(value, dict):
             value = rotate_secrets(value, private_key, public_key, old_secret, new_secret)
 
