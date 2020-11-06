@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives import hashes
 from functools import reduce
 from operator import getitem
 
-# Magic numbers
+# Magic numbers.
 KEY_CHUNK_SIZE = 100
 SUPPORTED_KEY_SIZES = [2048, 4096]
 NUMBER_OF_BYTES_PER_ENCRYPTED_CHUNK = 693
