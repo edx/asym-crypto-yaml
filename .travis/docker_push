@@ -2,6 +2,8 @@
 
 echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
 
+docker build . -t edxops/asym-crypto-yaml:latest
+
 if [ ! -z "${TRAVIS_TAG}" ]; then
     docker tag edxops/asym-crypto-yaml:latest edxops/asym-crypto-yaml:${TRAVIS_TAG}
 	docker push edxops/asym-crypto-yaml:${TRAVIS_TAG}
