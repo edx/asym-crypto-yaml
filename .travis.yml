@@ -17,7 +17,7 @@ deploy:
       branch: master
       tags: true
     distributions: sdist bdist_wheel
-    python: 3.6
+    python: 3.8
     user: edx
     password:
       secure: OUdmi26YD90XXo3HddnVRRnB0xHVZl2SEwyr7ne0E020/T1YF3z8s+Hr4Ca31/Rzy8A7ODJ/JEOrzan7ZDnakGIiepLYdReBaWmYJifme7c3GMkVebMWa6z+XKkRD0fzSdSSpj/oxXzyQ6uiMaZJ6p36ZZEayQoxxudlCjrZzk9vXspg7OI0gXUpn4zMtK/zgfZZEJbmKdrX5vdmqhimLQtUzuGTLmLParT90s5Ub+tRavVBjNEdgjlH29jqoQlo6jkQVbPCJXUgoO7FU7HDJR4MLLVyL66WSN5wNykbx5JpI6iNK8XlqVPhjcbUZiZLEUrPauaLLg4PFrrAKKzAlwfz1xKDi73E7oCPAt/OEgJiLSKHnO8YSiBcxVLxG3ruXgssBrsYRDfPq+MmPgNpnaV/oVmQL6D6BoIMgxYN7ROHi2AgpW417K3+dqzaN9aPnUHpC8/JuUdxryIKrB2PDmWmgR4kySr6IqnyvxB6ercFKiFRS79d4uGhh9NbIcKc1uou7tlYyLmzPa/Z/GmzLJngDcjInzsAwNWrnrhkAv9HryBPUgyvQ+3Uz8J10+Jk6L4OhgAzxwDtR4UzuD+f4KF6NHUJ8V+4aErAoI7/6Kbou8tasn8ExqlblYVPXQd4+xzMEDlIshYlz820VB9NcV693bnTZoyTQVUwt+piDRc=
