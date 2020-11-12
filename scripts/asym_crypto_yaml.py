@@ -1,6 +1,7 @@
 import click
 import yaml
 from base64 import b64encode
+from asym_crypto_yaml import *
 
 # Please make additional commands added to the cli a single function call and provide a test case.
 
