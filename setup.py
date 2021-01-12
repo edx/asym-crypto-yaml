@@ -6,7 +6,6 @@ https://github.com/pypa/sampleproject
 
 from setuptools import setup, find_packages
 from os import path
-from io import open
 
 def load_requirements(*requirements_paths):
     """

@@ -1,16 +1,14 @@
 language: python
 matrix:
   include:
-    - python: 3.6
+    - python: '3.8'
       env: TOXENV=py36
-    - python: 3.8
-      env: TOXENV=py38
 install:
-  - "pip install -r requirements/development.txt"
+  - pip install -r requirements/development.txt
 script:
-- tox -e $TOXENV
+  - tox -e $TOXENV
 services:
-- docker
+  - docker
 deploy:
   - provider: pypi
     on:
@@ -26,4 +24,5 @@ deploy:
       branch: master
       tags: true
     python: 3.8
-    script: DOCKER_USERNAME=$DOCKER_USERNAME DOCKER_PASSWORD=$DOCKER_PASSWORD TRAVIS_TAG=$TRAVIS_TAG bash .travis/docker_push
+    script: DOCKER_USERNAME=$DOCKER_USERNAME DOCKER_PASSWORD=$DOCKER_PASSWORD TRAVIS_TAG=$TRAVIS_TAG
+      bash .travis/docker_push

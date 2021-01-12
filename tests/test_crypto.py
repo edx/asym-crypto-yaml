@@ -141,7 +141,7 @@ def test_substitution_for_pyyaml():
     It should also work with encrypted values, even if no key is passed
     """
     assert load('some str') == 'some str'
-    with open('fixtures/test_substitution_for_pyyaml.yml', "r") as f:
+    with open('fixtures/test_substitution_for_pyyaml.yml') as f:
         loaded_dict = load(f)
         assert isinstance(loaded_dict['PASSWORD'], Encrypted)
 
@@ -187,7 +187,7 @@ def test_add_secret_to_yaml_file():
     copyfile(yaml_file_fixture, yaml_file_to_append_to)
     
     before_dict = None
-    with open(yaml_file_to_append_to, "r") as f:
+    with open(yaml_file_to_append_to) as f:
         before_dict = load(f)
 
     # Check for expected test data
@@ -198,7 +198,7 @@ def test_add_secret_to_yaml_file():
     assert test_key_value not in before_dict
     add_secret_to_yaml_file(test_key_value, test_key_value, public_key_output_filename, yaml_file_to_append_to)
 
-    with open(yaml_file_to_append_to, "r") as f:
+    with open(yaml_file_to_append_to) as f:
         after_dict = load(f)
     # Test the value was added
     assert test_key_value in after_dict
@@ -237,7 +237,7 @@ def test_decrypt_yaml_file_and_write_encrypted_file_to_disk():
     add_secret_to_yaml_file(test_key_value, test_key_value, public_key_output_filename, yaml_file_to_append_to)
    
     after_dict = None
-    with open(yaml_file_to_append_to, "r") as f:
+    with open(yaml_file_to_append_to) as f:
         after_dict = load(f, private_key_output_filename)
     
     after_dict["A"] = "A"
@@ -263,7 +263,7 @@ def test_reencrypt_secrets_and_write_to_yaml_file():
     reencrypt_secrets_and_write_to_yaml_file(input_yaml_file, private_key_file, public_key_output_filename_new)
    
     before_dict = None
-    with open(yaml_file_fixture, "r") as f:
+    with open(yaml_file_fixture) as f:
         before_dict = load(f)
    
     # Check for expected test data
@@ -275,7 +275,7 @@ def test_reencrypt_secrets_and_write_to_yaml_file():
     assert test_encrypted_key_value == "C"
 
     after_dict = None
-    with open(input_yaml_file, "r") as f:
+    with open(input_yaml_file) as f:
         after_dict = load(f)
 
     # Test the expected test data was not modified, and is still present
@@ -300,7 +300,7 @@ def test_add_nested_secret_to_yaml_file():
     copyfile(yaml_file_fixture, yaml_file_to_append_to)
 
     before_dict = None
-    with open(yaml_file_to_append_to, "r") as f:
+    with open(yaml_file_to_append_to) as f:
         before_dict = load(f)
 
     # Check for expected test data
@@ -309,7 +309,7 @@ def test_add_nested_secret_to_yaml_file():
 
     add_secret_to_yaml_file(nested_key, nested_value, public_key_output_filename, yaml_file_to_append_to)
 
-    with open(yaml_file_to_append_to, "r") as f:
+    with open(yaml_file_to_append_to) as f:
         after_dict = load(f)
 
     # Test the value is encrypted.

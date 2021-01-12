@@ -322,7 +322,7 @@ def add_secret_to_yaml_file(yaml_key, yaml_value_unencrypted, public_key_file, y
     """
     public_key = load_public_key_from_file(public_key_file)
     encrypted = encrypt_value(yaml_value_unencrypted, public_key)
-    with open(yaml_file_to_append_to, "r") as f:
+    with open(yaml_file_to_append_to) as f:
         encrypted_dict = _safe_load(f)
     if encrypted_dict is None:
         encrypted_dict = {}
@@ -424,7 +424,7 @@ def decrypt_yaml_file_and_write_encrypted_file_to_disk(input_yaml_file_path, pri
     private_key = None
     if private_key_path is not None:
         private_key = load_private_key_from_file(private_key_path)
-    with open(input_yaml_file_path, "r") as f:
+    with open(input_yaml_file_path) as f:
         encrypted_secrets = _safe_load(f)
     decrypted_secrets_dict = decrypt_yaml_dict(encrypted_secrets, private_key)
     write_dict_to_yaml(decrypted_secrets_dict, output_yaml_file_path)
@@ -435,7 +435,7 @@ def reencrypt_secrets_and_write_to_yaml_file(input_yaml_file_path, private_key_p
     if private_key_path and public_key_path is not None:
         private_key = load_private_key_from_file(private_key_path)
         public_key = load_public_key_from_file(public_key_path)
-    with open(input_yaml_file_path, "r") as f:
+    with open(input_yaml_file_path) as f:
         encrypted_secrets = _safe_load(f)
     encrypted_secrets_dict = reencrypt_secrets(encrypted_secrets, private_key, public_key)
     write_dict_to_yaml(encrypted_secrets_dict, input_yaml_file_path)
@@ -448,7 +448,7 @@ def rotate_secrets_and_write_to_yaml_file(secrets_dir_path, private_key_path, pu
         private_key = load_private_key_from_file(private_key_path)
         public_key = load_public_key_from_file(public_key_path)
     for input_yaml_file_path in glob.glob(os.path.join(secrets_dir_path, '*.y*ml')):
-        with open(input_yaml_file_path, "r") as f:
+        with open(input_yaml_file_path) as f:
             encrypted_secrets = _safe_load(f)
         encrypted_secrets_dict = rotate_secrets(encrypted_secrets, private_key, public_key, old_secret, new_secret)
         write_dict_to_yaml(encrypted_secrets_dict, input_yaml_file_path)
