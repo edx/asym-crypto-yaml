@@ -32,6 +32,10 @@ def encrypt_secret(secret_contents, public_key_file):
 @click.option('--public_key_file', default="clamps.public")
 @click.option('--target_secret_file', default="config/secrets.yaml")
 def add_secret(yaml_key, secret_contents, public_key_file, target_secret_file):
+    # Give the user a chance to show what they've typed or pasted
+    # in order to detect typos or clipboarding errors.
+    if input("Show secret in terminal before encrypting? [y/N]: ").lower() in ['y', 'yes']:
+        print("Secret value, inside quotes: \"%s\"" % secret_contents)
     add_secret_to_yaml_file(yaml_key, secret_contents, public_key_file, target_secret_file)
 
 @click.command()
