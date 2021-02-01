@@ -138,7 +138,7 @@ Install docker first then:
 Tests (out of docker)
 -------------
 
-Make sure you are using python > 3.6 then
+Make sure you are using python > 3.8 then
 
     pip install -r requirements/development.txt
     
