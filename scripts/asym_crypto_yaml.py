@@ -1,3 +1,6 @@
+import hashlib
+import sys
+
 import click
 import yaml
 from base64 import b64encode
@@ -31,8 +34,12 @@ def encrypt_secret(secret_contents, public_key_file):
 @click.option('--secret_contents', prompt=True, hide_input=True)
 @click.option('--public_key_file', default="clamps.public")
 @click.option('--target_secret_file', default="config/secrets.yaml")
-def add_secret(yaml_key, secret_contents, public_key_file, target_secret_file):
+@click.option('--print-hash/--no-print-hash', default=False, help="Print a hash of the secret for verification of correct typing/pasting")
+def add_secret(yaml_key, secret_contents, public_key_file, target_secret_file, print_hash):
     add_secret_to_yaml_file(yaml_key, secret_contents, public_key_file, target_secret_file)
+    if print_hash:
+        sec_hash = hashlib.sha256(secret_contents.encode()).hexdigest()
+        print("SHA256 hash of secret: %s" % sec_hash, file=sys.stderr)
 
 @click.command()
 @click.option('--secrets_file_path', help='', default="config/config.yaml")
