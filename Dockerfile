@@ -1,9 +1,9 @@
-from ubuntu:bionic
+from ubuntu:focal
 
-RUN apt-get update && apt-get install locales=2.27-3ubuntu1 git python3.8 python3.8-distutils python3.8-dev -qy && \
-pip3 install --upgrade pip setuptools && \
+RUN apt-get update && apt-get install locales git python3.8 python3.8-distutils python3.8-dev python3-pip -qy && \
 if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
 if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+pip install --upgrade pip setuptools && \
 rm -rf /var/lib/apt/lists/*
 
 # Set the locale
