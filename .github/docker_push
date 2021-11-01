@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "$$DOCKERHUB_PASSWORD" | docker login -u "$$DOCKERHUB_USERNAME" --password-stdin
+
+docker build . -t edxops/asym-crypto-yaml:latest
+
+if [ ! -z "${GITHUB_SHA}" ]; then
+    docker tag edxops/asym-crypto-yaml:latest edxops/asym-crypto-yaml:${GITHUB_SHA}
+	docker push edxops/asym-crypto-yaml:${GITHUB_SHA}
+fi
+
+docker push edxops/asym-crypto-yaml:latest

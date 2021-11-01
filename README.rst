@@ -1,7 +1,7 @@
 asym-crypto-yaml
 ================
 
-.. image:: https://api.travis-ci.org/edx/asym-crypto-yaml.svg
+.. image:: https://github.com/edx/asym-crypto-yaml/workflows/Python%20CI/badge.svg?branch=master
 
 
 
@@ -164,6 +164,6 @@ Releasing to Pypi
 -----------------
 
 To create a new release, bump the version in setup.py and once it's merged tag the master with the version number.
-Travis will automatically push the new version to Pypi.
+GitHub CI will automatically push the new version to Pypi.
 
-https://travis-ci.org/edx/asym-crypto-yaml
+https://github.com/edx/asym-crypto-yaml/actions?query=workflow%3A%22Publish+package+to+PyPI%22
