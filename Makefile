@@ -22,3 +22,16 @@ test: ## Run tests using tox
 
 shell: ## Open a shell in the docker container
 	docker run -it --rm -v `pwd`:/app edxops/asym-crypto-yaml /bin/bash
+
+github_docker_build:
+	docker build . -t edxops/asym-crypto-yaml:latest
+
+github_docker_tag: github_docker_build
+	docker tag edxops/asym-crypto-yaml:latest edxops/asym-crypto-yaml:${GITHUB_SHA}
+
+github_docker_auth:
+	echo "$$DOCKERHUB_PASSWORD" | docker login -u "$$DOCKERHUB_USERNAME" --password-stdin
+
+github_docker_push: github_docker_tag github_docker_auth ## push to docker hub
+	docker push edxops/asym-crypto-yaml:${GITHUB_SHA}
+	docker push edxops/asym-crypto-yaml:latest
