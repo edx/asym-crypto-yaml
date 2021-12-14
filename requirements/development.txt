@@ -4,26 +4,80 @@
 #
 #    make upgrade
 #
-appdirs==1.4.4            # via virtualenv
-attrs==20.3.0             # via pytest
-cffi==1.14.4              # via -r requirements/base.txt, cryptography
-click==7.1.2              # via -r requirements/base.txt, -r requirements/pip-tools.txt, pip-tools
-cryptography==3.3.1       # via -r requirements/base.txt
-distlib==0.3.1            # via virtualenv
-filelock==3.0.12          # via tox, virtualenv
-iniconfig==1.1.1          # via pytest
-packaging==20.8           # via pytest, tox
-pip-tools==5.5.0          # via -r requirements/pip-tools.txt
-pluggy==0.13.1            # via pytest, tox
-py==1.10.0                # via pytest, tox
-pycparser==2.20           # via -r requirements/base.txt, cffi
-pyparsing==2.4.7          # via packaging
-pytest==6.2.1             # via -r requirements/development.in
-pyyaml==5.3.1             # via -r requirements/base.txt
-six==1.15.0               # via -r requirements/base.txt, cryptography, tox, virtualenv
-toml==0.10.2              # via pytest, tox
-tox==3.21.0               # via -r requirements/development.in
-virtualenv==20.3.0        # via tox
+attrs==21.2.0
+    # via pytest
+backports.entry-points-selectable==1.1.1
+    # via virtualenv
+cffi==1.15.0
+    # via
+    #   -r requirements/base.txt
+    #   cryptography
+click==8.0.3
+    # via
+    #   -r requirements/base.txt
+    #   -r requirements/pip-tools.txt
+    #   pip-tools
+cryptography==36.0.0
+    # via -r requirements/base.txt
+distlib==0.3.4
+    # via virtualenv
+filelock==3.4.0
+    # via
+    #   tox
+    #   virtualenv
+iniconfig==1.1.1
+    # via pytest
+packaging==21.3
+    # via
+    #   pytest
+    #   tox
+pep517==0.12.0
+    # via
+    #   -r requirements/pip-tools.txt
+    #   pip-tools
+pip-tools==6.4.0
+    # via -r requirements/pip-tools.txt
+platformdirs==2.4.0
+    # via virtualenv
+pluggy==1.0.0
+    # via
+    #   pytest
+    #   tox
+py==1.11.0
+    # via
+    #   pytest
+    #   tox
+pycparser==2.21
+    # via
+    #   -r requirements/base.txt
+    #   cffi
+pyparsing==3.0.6
+    # via packaging
+pytest==6.2.5
+    # via -r requirements/development.in
+pyyaml==6.0
+    # via -r requirements/base.txt
+six==1.16.0
+    # via
+    #   tox
+    #   virtualenv
+toml==0.10.2
+    # via
+    #   pytest
+    #   tox
+tomli==1.2.2
+    # via
+    #   -r requirements/pip-tools.txt
+    #   pep517
+tox==3.24.4
+    # via -r requirements/development.in
+virtualenv==20.10.0
+    # via tox
+wheel==0.37.0
+    # via
+    #   -r requirements/pip-tools.txt
+    #   pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
+# setuptools
