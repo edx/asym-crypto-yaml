@@ -163,7 +163,7 @@ Doing this will spin up the docker dev environment and update the requirements
 Releasing to Pypi
 -----------------
 
-To create a new release, bump the version in setup.py and once it's merged tag the master with the version number.
+To create a new release, bump the version in asym_crypto_yaml/__init__.py and once it's merged tag the master with the version number.
 GitHub CI will automatically push the new version to Pypi.
 
 https://github.com/edx/asym-crypto-yaml/actions?query=workflow%3A%22Publish+package+to+PyPI%22
