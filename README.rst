@@ -120,7 +120,9 @@ Docker Usage
 -------------
 The cli is published to Dockerhub as a docker image
 You can generate a public and private key in your current directory like so:
-    
+
+::
+
     docker run -it --rm -v $(pwd):/asym -w /asym asym_crypto_yaml generate-private-key --private_key_output key.private
     docker run -it --rm -v $(pwd):/asym -w /asym asym_crypto_yaml generate-public-key --private_key_file key.private --public_key_output key.public
     
