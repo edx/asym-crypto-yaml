@@ -123,8 +123,8 @@ You can generate a public and private key in your current directory like so:
 
 ::
 
-    docker run -it --rm -v $(pwd):/asym -w /asym asym_crypto_yaml generate-private-key --private_key_output key.private
-    docker run -it --rm -v $(pwd):/asym -w /asym asym_crypto_yaml generate-public-key --private_key_file key.private --public_key_output key.public
+    docker run -it --rm -v $(pwd):/asym -w /asym edxops/asym-crypto-yaml generate-private-key --private_key_output key.private
+    docker run -it --rm -v $(pwd):/asym -w /asym edxops/asym-crypto-yaml generate-public-key --private_key_file key.private --public_key_output key.public
     
 Any other cli commands can be run in this fashion.
     
