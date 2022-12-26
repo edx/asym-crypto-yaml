@@ -6,19 +6,19 @@
 #
 attrs==21.2.0
     # via pytest
-backports.entry-points-selectable==1.1.1
+backports-entry-points-selectable==1.1.1
     # via virtualenv
 cffi==1.15.0
     # via
-    #   -r requirements/base.txt
+    #   -r base.txt
     #   cryptography
 click==8.0.3
     # via
-    #   -r requirements/base.txt
-    #   -r requirements/pip-tools.txt
+    #   -r base.txt
+    #   -r pip-tools.txt
     #   pip-tools
 cryptography==36.0.0
-    # via -r requirements/base.txt
+    # via -r base.txt
 distlib==0.3.4
     # via virtualenv
 filelock==3.4.0
@@ -33,10 +33,10 @@ packaging==21.3
     #   tox
 pep517==0.12.0
     # via
-    #   -r requirements/pip-tools.txt
+    #   -r pip-tools.txt
     #   pip-tools
 pip-tools==6.4.0
-    # via -r requirements/pip-tools.txt
+    # via -r pip-tools.txt
 platformdirs==2.4.0
     # via virtualenv
 pluggy==1.0.0
@@ -49,14 +49,14 @@ py==1.11.0
     #   tox
 pycparser==2.21
     # via
-    #   -r requirements/base.txt
+    #   -r base.txt
     #   cffi
 pyparsing==3.0.6
     # via packaging
 pytest==6.2.5
-    # via -r requirements/development.in
+    # via -r development.in
 pyyaml==6.0
-    # via -r requirements/base.txt
+    # via -r base.txt
 six==1.16.0
     # via
     #   tox
@@ -67,15 +67,15 @@ toml==0.10.2
     #   tox
 tomli==2.0.0
     # via
-    #   -r requirements/pip-tools.txt
+    #   -r pip-tools.txt
     #   pep517
 tox==3.24.4
-    # via -r requirements/development.in
+    # via -r development.in
 virtualenv==20.10.0
     # via tox
-wheel==0.37.0
+wheel==0.38.1
     # via
-    #   -r requirements/pip-tools.txt
+    #   -r pip-tools.txt
     #   pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
