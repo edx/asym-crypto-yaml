@@ -7,10 +7,10 @@
 cffi==1.15.0
     # via cryptography
 click==8.0.3
-    # via -r requirements/base.in
-cryptography==36.0.0
-    # via -r requirements/base.in
+    # via -r base.in
+cryptography==39.0.1
+    # via -r base.in
 pycparser==2.21
     # via cffi
 pyyaml==6.0
-    # via -r requirements/base.in
+    # via -r base.in
